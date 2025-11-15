@@ -1,3 +1,63 @@
+# Investigation and Mitigation of Gender Bias in the SNLI Dataset for Natural Language Inference
+
+## Overview
+
+This paper investigates gender bias in the SNLI (Semantic Natural Language Inference) dataset and demonstrates how fine-tuning the ELECTRA-small model with gender-neutralized data can mitigate occupational gender bias.
+
+## Problem
+
+NLP datasets collected through crowdsourcing often contain gender biases, particularly stereotypical associations between occupations and genders. These biases can lead to:
+- Skewed predictions in NLI tasks
+- Perpetuation of harmful stereotypes
+- Reduced model generalization on gender-related tasks
+
+## Methodology
+
+**Bias Detection:**
+- Applied the "competency problems" framework to identify artifact tokens in SNLI
+- Used statistical analysis (z-scores with Bonferroni correction) to detect gender-biased patterns
+- Analyzed multiple tokenization methods (unigrams, bigrams, custom "Bigram NS-Gen")
+- Found that 32.4% of SNLI dataset artifacts were gender-related
+
+**Bias Mitigation:**
+- Created gender-neutralized training data by gender-swapping occupations (~30,000 sentences)
+- Fine-tuned ELECTRA-small on combined SNLI + neutralized dataset
+- All hypothesis pairs labeled as entailment to reduce bias
+
+## Key Findings
+
+**Dataset Artifacts:**
+- Strong occupational stereotypes: "nanny" → female (73% → 0.3% contradiction probability shift when gender swapped)
+- Identified three bias classes: strong associations, weaker associations, and neutral occupations
+- Gender artifacts present across all label types (entailment, neutral, contradiction)
+
+**Evaluation Metrics:**
+- **False Negative Rate**: Reduced from 20% → 8% (male), 92% → 82% (female)
+- **Model Bias (Unigrams)**: Decreased from 17% → 4.1% (entailment), 13.7% → 12.3% (contradiction)
+- **Validation Accuracy**: Improved from 40.5% → 53.6% on gender-neutral test set
+- **SNLI Performance**: Maintained 89.9% accuracy on original SNLI validation set
+
+## Results
+
+✅ Successfully reduced gender bias while maintaining model performance  
+✅ Improved generalization on gender-related NLI tasks  
+✅ Reduced false negative rates for both male and female categories  
+✅ Decreased mean absolute difference in entailment probabilities for stereotypically biased occupations
+
+## Limitations & Future Work
+
+- Some heavily biased occupations still difficult to fully debias
+- Overall MAD metric slightly increased (0.57 → 0.61)
+- Future work: individual pronoun analysis, reversed premise/hypothesis evaluation, metrics accounting for all three labels
+
+## Technologies
+
+- Model: ELECTRA-small
+- Dataset: SNLI + gender-neutralized augmentation
+- Framework: Competency problems analysis with statistical significance testing
+
+
+
 # fp-dataset-artifacts
 
 ## Getting Started
